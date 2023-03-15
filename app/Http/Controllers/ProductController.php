@@ -62,6 +62,12 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'cate_id' => 'nullable|integer',
+            'name' => 'nullable|string|max:255',
+            'description' => 'nullable'
+        ]);
+
         $product = Product::create($request->all())->refresh();
         return response($product, Response::HTTP_CREATED);
     }
@@ -87,6 +93,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        $this->validate($request, [
+            'cate_id' => 'nullable|integer',
+            'name' => 'nullable|string|max:255',
+            'description' => 'nullable'
+        ]);
+
         $product->update($request->all());
         return response($product, Response::HTTP_OK);
     }
