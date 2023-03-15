@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
@@ -11,9 +12,41 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        // 取得網址
+        $url = $request->url;
+
+        // 取得get params
+        $queryParams = $request->query();
+        // 重新排列，大家一致
+        ksort($queryParams);
+
+        // 將此轉為string
+        $queryString = http_build_query($queryParams);
+
+        // 重新組合
+        $fullUrl = "{$url}?{$queryString}";
+
+        if (Cache::has($fullUrl)) {
+            return Cache::get($fullUrl);
+        }
+
+        $limit = $request->limit ?? 10;
+
+        $query = Product::query();
+
+        if (isset($request->name)) {
+            $query->where('name', 'like', $request->name . "%");
+        }
+
+        $product = $query->orderBy('id', 'desc')
+            ->paginate($limit)
+            ->appends($request->query());
+
+        return Cache::remember($fullUrl, 60, function () use ($product) {
+            return response($product, Response::HTTP_OK);
+        });
     }
 
     /**
@@ -38,7 +71,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return response($product, Response::HTTP_OK);
     }
 
     /**
