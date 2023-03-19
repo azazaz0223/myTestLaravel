@@ -3,16 +3,15 @@
 namespace Database\Factories;
 
 use App\Models\Cate;
-use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Cate>
  */
-class ProductFactory extends Factory
+class CateFactory extends Factory
 {
-    protected $model = Product::class;
+    protected $model = Cate::class;
 
     /**
      * Define the model's default state.
@@ -22,10 +21,9 @@ class ProductFactory extends Factory
     public function definition() : array
     {
         return [
-            'cate_id' => Cate::all()->random()->id,
-            'name' => $this->faker->name,
-            'description' => $this->faker->text,
+            'name' => $this->faker->unique()->name,
             'enabled' => $this->faker->boolean,
+            'sort' => $this->faker->numberBetween(1, 1000),
             'operator_id' => User::all()->random()->id
         ];
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductCollection;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -34,7 +36,7 @@ class ProductController extends Controller
 
         $limit = $request->limit ?? 10;
 
-        $query = Product::query();
+        $query = Product::query()->with('cate');
 
         if (isset($request->name)) {
             $query->where('name', 'like', $request->name . "%");
@@ -45,7 +47,7 @@ class ProductController extends Controller
             ->appends($request->query());
 
         return Cache::remember($fullUrl, 60, function () use ($product) {
-            return response($product, Response::HTTP_OK);
+            return new ProductCollection($product);
         });
     }
 
@@ -63,7 +65,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'cate_id' => 'nullable|integer',
+            'cate_id' => 'nullable|exists:cates,id',
             'name' => 'nullable|string|max:255',
             'description' => 'nullable'
         ]);
@@ -77,7 +79,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response($product, Response::HTTP_OK);
+        return new ProductResource($product);
     }
 
     /**
@@ -94,7 +96,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $this->validate($request, [
-            'cate_id' => 'nullable|integer',
+            'cate_id' => 'nullable|exists:cates,id',
             'name' => 'nullable|string|max:255',
             'description' => 'nullable'
         ]);
