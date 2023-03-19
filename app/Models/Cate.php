@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model
+class Cate extends Model
 {
     use HasFactory;
 
@@ -15,13 +15,12 @@ class Product extends Model
     protected $date = [ 'deleted_at' ];
 
     protected $fillable = [
-        'cate_id',
         'name',
-        'description',
+        'sort',
     ];
 
-    public function cate()
+    public function products()
     {
-        return $this->belongsTo('App\Models\Cate');
+        return $this->hasMany('App\Models\Product', 'cate_id', 'id');
     }
 }
