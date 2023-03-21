@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -9,6 +10,8 @@ use Validator;
 
 class AuthController extends Controller
 {
+    use ApiResponseTrait;
+
     /**
      * Create a new AuthController instance.
      *
@@ -26,14 +29,13 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
+        $this->validate($request, [
             'email' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        if (! $token = auth()->attempt($validator->validated())) {
-            return response([ 'message' => 'Unauthorized' ], Response::HTTP_UNAUTHORIZED);
+        if (! $token = auth()->attempt($request->all())) {
+            return $this->errorResponse('Unauthorized', Response::HTTP_UNAUTHORIZED);
         }
 
         return $this->createNewToken($token);
@@ -46,7 +48,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'name' => 'required|string|between:2,100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
@@ -54,7 +56,7 @@ class AuthController extends Controller
 
         $user = User::create(
             array_merge(
-                $validator->validated(),
+                $request->all(),
                 [ 'password' => bcrypt($request->password) ]
             )
         );
@@ -91,6 +93,7 @@ class AuthController extends Controller
     {
         return response([ 'data' => auth()->user() ], Response::HTTP_OK);
     }
+
     /**
      * Get the token array structure.
      *
@@ -105,7 +108,7 @@ class AuthController extends Controller
                 'data' => [
                     'access_token' => $token,
                     'token_type' => 'bearer',
-                    'expires_in' => auth()->factory()->getTTL() * 60,
+                    'expires_in' => auth()->factory()->getTTL() * 3600,
                     'user' => auth()->user()
                 ]
             ], Response::HTTP_OK
