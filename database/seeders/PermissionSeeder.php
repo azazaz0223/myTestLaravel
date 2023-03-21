@@ -39,7 +39,7 @@ class PermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create([ 'name' => $permission, 'guard_name' => 'admin' ]);
+            Permission::create([ 'name' => $permission ]);
         }
     }
 }
