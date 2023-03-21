@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Traits\ApiResponseTrait;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -10,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Summary of Handler
+ */
 class Handler extends ExceptionHandler
 {
     use ApiResponseTrait;
@@ -46,7 +50,7 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      */
-    public function register(): void
+    public function register() : void
     {
         $this->reportable(function (Throwable $e) {
             //
@@ -56,9 +60,9 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($request->expectsJson()) {
-            // 1.Model 找不到資源（上個範例修改為以下程式）
+            // 1.Model 找不到資源
             if ($exception instanceof ModelNotFoundException) {
-                // 呼叫 errorResponse 方法（特徵撰寫的方法）
+                // 呼叫 errorResponse 方法
                 return $this->errorResponse(
                     '找不到資源',
                     Response::HTTP_NOT_FOUND
@@ -81,5 +85,24 @@ class Handler extends ExceptionHandler
         }
 
         return parent::render($request, $exception);
+    }
+
+    /**
+     * Summary of unauthenticated
+     * @param mixed $request
+     * @param AuthenticationException $exception
+     * @return \Illuminate\Http\Response
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        // 客戶端請求JSON格式
+        if ($request->expectsJson()) {
+            return $this->errorResponse(
+                $exception->getMessage(),
+                Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        return parent::unauthenticated($request, $exception);
     }
 }
