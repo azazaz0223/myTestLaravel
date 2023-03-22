@@ -42,12 +42,12 @@ class ProductController extends Controller
             $query->where('name', 'like', $request->name . "%");
         }
 
-        $product = $query->orderBy('id', 'desc')
+        $products = $query->orderBy('id', 'desc')
             ->paginate($limit)
             ->appends($request->query());
 
-        return Cache::remember($fullUrl, 60, function () use ($product) {
-            return new ProductCollection($product);
+        return Cache::remember($fullUrl, 60, function () use ($products) {
+            return new ProductCollection($products);
         });
     }
 
