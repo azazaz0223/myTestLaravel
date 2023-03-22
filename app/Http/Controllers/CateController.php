@@ -16,9 +16,9 @@ class CateController extends Controller
      */
     public function index()
     {
-        $cate = Cate::select('id', 'name', 'sort', 'created_at', 'updated_at')->get();
+        $cates = Cate::select('id', 'name', 'sort', 'created_at', 'updated_at')->get();
 
-        return new CateCollection($cate);
+        return new CateCollection($cates);
     }
 
     /**

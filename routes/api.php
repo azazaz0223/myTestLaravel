@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\CateController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +34,10 @@ Route::group([
     Route::get('/user-profile', [ AuthController::class, 'userProfile' ]);
 });
 
-Route::apiResource('products', ProductController::class);
+Route::apiResources([
+    'products' => ProductController::class,
+    'cates' => CateController::class,
+    'roles' => RoleController::class,
+]);
 
-Route::apiResource('cates', CateController::class);
+Route::apiResource('permissions', PermissionController::class)->only([ 'index', 'show' ]);
