@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CateController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
@@ -32,6 +33,9 @@ Route::group([
     Route::get('/user-profile', [ AuthController::class, 'userProfile' ]);
 });
 
-Route::apiResource('products', ProductController::class);
+Route::apiResources([
+    'products' => ProductController::class,
+    'cates' => CateController::class,
+]);
 
-Route::apiResource('cates', CateController::class);
+Route::apiResource('permissions', PermissionController::class)->only([ 'index', 'show' ]);
