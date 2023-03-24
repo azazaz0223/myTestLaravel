@@ -5,6 +5,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,7 @@ Route::apiResources([
     'products' => ProductController::class,
     'cates' => CateController::class,
     'roles' => RoleController::class,
+    'users' => UserController::class,
 ]);
 
 Route::apiResource('permissions', PermissionController::class)->only([ 'index', 'show' ]);
