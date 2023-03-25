@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Traits\ApiResponseTrait;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
@@ -68,6 +69,7 @@ class Handler extends ExceptionHandler
                     Response::HTTP_NOT_FOUND
                 );
             }
+
             // 2.網址輸入錯誤（新增判斷）
             if ($exception instanceof NotFoundHttpException) {
                 return $this->errorResponse(
@@ -75,11 +77,20 @@ class Handler extends ExceptionHandler
                     Response::HTTP_NOT_FOUND
                 );
             }
-            // 3.網址不允許該請求動詞（新增判斷）
+
+            // 3.網址不允許該請求動詞
             if ($exception instanceof MethodNotAllowedHttpException) {
                 return $this->errorResponse(
                     $exception->getMessage(), // 回傳例外內的訊息
                     Response::HTTP_METHOD_NOT_ALLOWED
+                );
+            }
+
+            // 4.攔截權限
+            if ($exception instanceof UnauthorizedException) {
+                return $this->errorResponse(
+                    '無權限使用',
+                    Response::HTTP_FORBIDDEN
                 );
             }
         }

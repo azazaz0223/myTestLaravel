@@ -35,11 +35,12 @@ Route::group([
     Route::get('/user-profile', [ AuthController::class, 'userProfile' ]);
 });
 
-Route::apiResources([
-    'products' => ProductController::class,
-    'cates' => CateController::class,
-    'roles' => RoleController::class,
-    'users' => UserController::class,
-]);
-
-Route::apiResource('permissions', PermissionController::class)->only([ 'index', 'show' ]);
+Route::group([ 'middleware' => [ 'auth' ] ], function () {
+    Route::apiResources([
+        'products' => ProductController::class,
+        'cates' => CateController::class,
+        'roles' => RoleController::class,
+        'users' => UserController::class,
+    ]);
+    Route::apiResource('permissions', PermissionController::class)->only([ 'index', 'show' ]);
+});
