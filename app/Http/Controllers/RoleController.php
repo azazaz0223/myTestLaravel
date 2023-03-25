@@ -13,6 +13,20 @@ use Symfony\Component\HttpFoundation\Response;
 class RoleController extends Controller
 {
     /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:role-list')->only('index');
+        $this->middleware('permission:role-show')->only('show');
+        $this->middleware('permission:role-create')->only('store');
+        $this->middleware('permission:role-edit')->only('update');
+        $this->middleware('permission:role-delete')->only('destroy');
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()

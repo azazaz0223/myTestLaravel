@@ -11,6 +11,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CateController extends Controller
 {
+
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:cate-list')->only('index');
+        $this->middleware('permission:cate-show')->only('show');
+        $this->middleware('permission:cate-create')->only('store');
+        $this->middleware('permission:cate-edit')->only('update');
+        $this->middleware('permission:cate-delete')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      */

@@ -11,6 +11,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
+
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:product-list')->only('index');
+        $this->middleware('permission:product-show')->only('show');
+        $this->middleware('permission:product-create')->only('store');
+        $this->middleware('permission:product-edit')->only('update');
+        $this->middleware('permission:product-delete')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      */

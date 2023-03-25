@@ -16,13 +16,13 @@ class PermissionSeeder extends Seeder
 
         // 建立權限表
         $permissions = [
-            'user-index',
+            'user-list',
             'user-show',
             'user-create',
             'user-edit',
             'user-delete',
             'role-list',
-            'role-index',
+            'role-show',
             'role-create',
             'role-edit',
             'role-delete',

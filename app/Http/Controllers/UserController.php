@@ -12,6 +12,20 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller
 {
     /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('permission:user-list')->only('index');
+        $this->middleware('permission:user-show')->only('show');
+        $this->middleware('permission:user-create')->only('store');
+        $this->middleware('permission:user-edit')->only('update');
+        $this->middleware('permission:user-delete')->only('destroy');
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
@@ -109,9 +123,9 @@ class UserController extends Controller
             ]
         ]);
 
-        $user->name = $request->name ?? $request->name;
-        $user->email = $request->email ?? $request->email;
-        $user->password = $request->password ?? bcrypt($request->password);
+        $user->name = $request->name ?? $user->name;
+        $user->email = $request->email ?? $user->email;
+        $user->password = bcrypt($request->password) ?? $user->password;
         $user->save();
 
         if (isset($request->roles)) {
