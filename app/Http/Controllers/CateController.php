@@ -58,6 +58,7 @@ class CateController extends Controller
             'sort' => 'nullable|integer'
         ]);
 
+        $cate = auth()->user()->cates()->create($request->all())->refresh();
         $cate = Cate::create($request->all())->refresh();
 
         return response([ 'data' => $cate ], Response::HTTP_CREATED);

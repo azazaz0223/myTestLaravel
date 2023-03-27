@@ -51,7 +51,7 @@ class ProductController extends Controller
 
         $limit = $request->limit ?? 10;
 
-        $query = Product::query()->with('cate');
+        $query = Product::query()->with('cate')->with('operator');
 
         if (isset($request->name)) {
             $query->where('name', 'like', $request->name . "%");
@@ -85,7 +85,7 @@ class ProductController extends Controller
             'description' => 'nullable'
         ]);
 
-        $product = Product::create($request->all())->refresh();
+        $product = auth()->user()->products()->create($request->all())->refresh();
         return response($product, Response::HTTP_CREATED);
     }
 
@@ -116,7 +116,11 @@ class ProductController extends Controller
             'description' => 'nullable'
         ]);
 
-        $product->update($request->all());
+        $input = $request->all();
+
+        $input['operator_id'] = auth()->user()->id;
+
+        $product->update($input);
         return response($product, Response::HTTP_OK);
     }
 

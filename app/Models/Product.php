@@ -18,10 +18,16 @@ class Product extends Model
         'cate_id',
         'name',
         'description',
+        'operator_id',
     ];
 
     public function cate()
     {
         return $this->belongsTo('App\Models\Cate');
+    }
+
+    public function operator()
+    {
+        return $this->belongsTo('App\Models\User');
     }
 }

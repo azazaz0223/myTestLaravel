@@ -20,6 +20,7 @@ class ProductCollection extends ResourceCollection
                 return [
                     'id' => $product->id,
                     'cate_name' => $product->cate->name,
+                    'operator_name' => $product->operator->name,
                     'enabled' => $product->enabled,
                     'created_at' => $product->created_at,
                     'updated_at' => $product->updated_at
