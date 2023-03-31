@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Traits\ApiResponseTrait;
+use Illuminate\Database\QueryException;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -91,6 +92,14 @@ class Handler extends ExceptionHandler
                 return $this->errorResponse(
                     '無權限使用',
                     Response::HTTP_FORBIDDEN
+                );
+            }
+
+            // 5.攔截SQL錯誤
+            if ($exception instanceof QueryException) {
+                return $this->errorResponse(
+                    $exception->getMessage(),
+                    Response::HTTP_INTERNAL_SERVER_ERROR
                 );
             }
         }
