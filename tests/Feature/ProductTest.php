@@ -141,4 +141,21 @@ class ProductTest extends TestCase
 
         $response->assertStatus(201)->assertJson($formData);
     }
+
+    public function testCanNotCreateProduct()
+    {
+        User::factory(1)->create();
+        $cate = Cate::factory()->create();
+
+        // 使用POST請求
+        $response = $this->json('POST', 'api/products', [
+            'cate_id' => $cate->id,
+            'name' => 'test',
+            'description' => 'test描述'
+        ]);
+        // 當發生例外錯誤時顯示錯誤訊息
+        $this->withoutExceptionHandling();
+
+        $response->assertStatus(401)->assertJson([ 'message' => "Unauthenticated." ]);
+    }
 }
