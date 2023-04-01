@@ -56,6 +56,7 @@ class ProductTest extends TestCase
         // user分配角色
         $user->assignRole('ProductListTester');
 
+        // 取得token並登入
         $token = JWTAuth::fromUser($user);
 
         // 使用GET請求
@@ -93,5 +94,51 @@ class ProductTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure($resultStructure);
+    }
+
+    public function testCanCreateProduct()
+    {
+        // 建立權限
+        $permission = Permission::create([
+            'name' => 'product-create'
+        ]);
+
+        // 建立角色
+        $role = Role::create([
+            'name' => 'ProductCreateTester',
+        ]);
+
+        // 把權限分配給角色
+        $role->syncPermissions($permission);
+
+        // 建立user
+        $user = User::create([
+            'name' => 'Admin',
+            'email' => fake()->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => bcrypt('1111'),
+            'remember_token' => Str::random(10),
+        ]);
+
+        // user分配角色
+        $user->assignRole('ProductCreateTester');
+
+        // 取得token並登入
+        $token = JWTAuth::fromUser($user);
+
+        $cate = Cate::factory()->create();
+
+        $formData = [
+            'cate_id' => $cate->id,
+            'name' => 'test',
+            'description' => 'test描述'
+        ];
+
+        // 使用POST請求
+        $response = $this->json('POST', 'api/products?token=' . $token, $formData);
+        // 當發生例外錯誤時顯示錯誤訊息
+        $this->withoutExceptionHandling();
+
+        $response->assertStatus(201)->assertJson($formData);
     }
 }
