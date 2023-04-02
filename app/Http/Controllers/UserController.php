@@ -30,6 +30,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', User::class);
+
         $limit = $request->limit ?? 10;
 
         $query = User::query();
@@ -60,6 +62,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', User::class);
+
         $this->validate($request, [
             'name' => 'required|string',
             'email' => [
@@ -92,6 +96,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $this->authorize('view', User::class);
+
         return new UserResource($user);
     }
 
@@ -108,6 +114,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', User::class);
+
         $this->validate($request, [
             'name' => 'string',
             'email' => [
@@ -144,6 +152,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete', User::class);
+
         $user->delete();
         return response(null, Response::HTTP_NO_CONTENT);
     }
