@@ -11,21 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 class PermissionController extends Controller
 {
     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('permission:permission-list')->only('index');
-        $this->middleware('permission:permission-show')->only('show');
-    }
-
-    /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Permission::class);
+
         $permissions = Permission::all();
         return new PermissionCollection($permissions);
     }
@@ -35,6 +26,8 @@ class PermissionController extends Controller
      */
     public function show(Permission $permission)
     {
+        $this->authorize('view', Permission::class);
+
         return new PermissionResource($permission);
     }
 }
