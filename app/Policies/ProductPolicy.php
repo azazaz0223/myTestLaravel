@@ -62,7 +62,7 @@ class ProductPolicy
      * @param User $user
      * @return bool
      */
-    public function update(User $user, Product $product) : bool
+    public function update(User $user) : bool
     {
         if ($user->can('product-update')) {
             return true;
@@ -74,7 +74,7 @@ class ProductPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Product $product) : bool
+    public function delete(User $user) : bool
     {
         if ($user->can('product-delete')) {
             return true;

@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Cate;
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Spatie\Permission\Models\Role;
+use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class CatePolicy
+class RolePolicy
 {
     use HandlesAuthorization;
 
@@ -19,7 +19,7 @@ class CatePolicy
      */
     public function viewAny(User $user) : bool
     {
-        if ($user->can('cate-list')) {
+        if ($user->can('role-list')) {
             return true;
         } else {
             return false;
@@ -34,7 +34,7 @@ class CatePolicy
      */
     public function view(User $user) : bool
     {
-        if ($user->can('cate-show')) {
+        if ($user->can('role-show')) {
             return true;
         } else {
             return false;
@@ -49,7 +49,7 @@ class CatePolicy
      */
     public function create(User $user) : bool
     {
-        if ($user->can('cate-create')) {
+        if ($user->can('role-create')) {
             return true;
         } else {
             return false;
@@ -64,7 +64,7 @@ class CatePolicy
      */
     public function update(User $user) : bool
     {
-        if ($user->can('cate-update')) {
+        if ($user->can('role-update')) {
             return true;
         } else {
             return false;
@@ -79,7 +79,7 @@ class CatePolicy
      */
     public function delete(User $user) : bool
     {
-        if ($user->can('cate-delete')) {
+        if ($user->can('role-delete')) {
             return true;
         } else {
             return false;
