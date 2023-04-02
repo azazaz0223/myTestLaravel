@@ -3,15 +3,15 @@
 namespace App\Exceptions;
 
 use App\Traits\ApiResponseTrait;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\QueryException;
-use Spatie\Permission\Exceptions\UnauthorizedException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 /**
  * Summary of Handler
@@ -88,7 +88,7 @@ class Handler extends ExceptionHandler
             }
 
             // 4.攔截權限
-            if ($exception instanceof UnauthorizedException) {
+            if ($exception instanceof AuthorizationException) {
                 return $this->errorResponse(
                     '無權限使用',
                     Response::HTTP_FORBIDDEN

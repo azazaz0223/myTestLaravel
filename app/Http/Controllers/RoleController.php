@@ -6,31 +6,18 @@ use App\Http\Resources\RoleCollection;
 use App\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleController extends Controller
 {
     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('permission:role-list')->only('index');
-        $this->middleware('permission:role-show')->only('show');
-        $this->middleware('permission:role-create')->only('store');
-        $this->middleware('permission:role-edit')->only('update');
-        $this->middleware('permission:role-delete')->only('destroy');
-    }
-
-    /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Role::class);
+
         $roles = Role::all();
         return new RoleCollection($roles);
     }
@@ -48,6 +35,8 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Role::class);
+
         $this->validate($request, [
             'name' => [
                 'required',
@@ -72,6 +61,8 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $this->authorize('view', Role::class);
+
         return new RoleResource($role);
     }
 
@@ -88,6 +79,8 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
+        $this->authorize('update', Role::class);
+
         $this->validate($request, [
             'name' => [
                 'required',
@@ -112,6 +105,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->authorize('delete', Role::class);
+
         $role->delete();
         return response(null, Response::HTTP_NO_CONTENT);
     }

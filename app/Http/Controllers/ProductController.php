@@ -11,26 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
-
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('permission:product-list')->only('index');
-        $this->middleware('permission:product-show')->only('show');
-        $this->middleware('permission:product-create')->only('store');
-        $this->middleware('permission:product-edit')->only('update');
-        $this->middleware('permission:product-delete')->only('destroy');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Product::class);
+
         // 取得網址
         $url = $request->url;
 
@@ -79,6 +66,8 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Product::class);
+
         $this->validate($request, [
             'cate_id' => 'nullable|exists:cates,id',
             'name' => 'nullable|string|max:255',
@@ -94,6 +83,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $this->authorize('view', Product::class);
+
         return new ProductResource($product);
     }
 
@@ -110,6 +101,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        $this->authorize('update', Product::class);
+
         $this->validate($request, [
             'cate_id' => 'nullable|exists:cates,id',
             'name' => 'nullable|string|max:255',
@@ -129,6 +122,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $this->authorize('delete', Product::class);
+
         $product->delete();
         return response(null, Response::HTTP_NO_CONTENT);
     }
