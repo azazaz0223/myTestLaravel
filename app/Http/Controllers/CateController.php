@@ -11,26 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CateController extends Controller
 {
-
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('permission:cate-list')->only('index');
-        $this->middleware('permission:cate-show')->only('show');
-        $this->middleware('permission:cate-create')->only('store');
-        $this->middleware('permission:cate-edit')->only('update');
-        $this->middleware('permission:cate-delete')->only('destroy');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Cate::class);
+
         $cates = Cate::select('id', 'name', 'sort', 'created_at', 'updated_at')->get();
 
         return new CateCollection($cates);
@@ -49,6 +36,8 @@ class CateController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Cate::class);
+
         $this->validate($request, [
             'name' => [
                 'required',
@@ -69,6 +58,8 @@ class CateController extends Controller
      */
     public function show(Cate $cate)
     {
+        $this->authorize('view', Cate::class);
+
         return new CateResource($cate);
     }
 
@@ -85,6 +76,8 @@ class CateController extends Controller
      */
     public function update(Request $request, Cate $cate)
     {
+        $this->authorize('update', Cate::class);
+
         $this->validate($request, [
             'name' => [
                 'max:50',
@@ -103,6 +96,8 @@ class CateController extends Controller
      */
     public function destroy(Cate $cate)
     {
+        $this->authorize('delete', Cate::class);
+
         $cate->delete();
         return response(null, Response::HTTP_NO_CONTENT);
     }
