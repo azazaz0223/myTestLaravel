@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
@@ -64,15 +65,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         $this->authorize('create', Product::class);
-
-        $this->validate($request, [
-            'cate_id' => 'nullable|exists:cates,id',
-            'name' => 'nullable|string|max:255',
-            'description' => 'nullable'
-        ]);
 
         $product = auth()->user()->products()->create($request->all())->refresh();
         return response($product, Response::HTTP_CREATED);
