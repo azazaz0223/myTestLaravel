@@ -6,12 +6,20 @@ use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
+    private $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -69,7 +77,7 @@ class ProductController extends Controller
     {
         $this->authorize('create', Product::class);
 
-        $product = auth()->user()->products()->create($request->all())->refresh();
+        $product = $this->productService->create($request->all());
         return response($product, Response::HTTP_CREATED);
     }
 

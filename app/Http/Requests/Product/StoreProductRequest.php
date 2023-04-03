@@ -21,10 +21,10 @@ class StoreProductRequest extends FormRequest
      */
     public function rules() : array
     {
-        return [
+        return $this->only([
             'cate_id' => 'nullable|exists:cates,id',
             'name' => 'nullable|string|max:255',
             'description' => 'nullable'
-        ];
+        ]);
     }
 }
