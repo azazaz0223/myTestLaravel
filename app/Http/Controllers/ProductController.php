@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
@@ -77,7 +78,8 @@ class ProductController extends Controller
     {
         $this->authorize('create', Product::class);
 
-        $product = $this->productService->create($request->all());
+        $product = $this->productService->create($request->validated());
+
         return response($product, Response::HTTP_CREATED);
     }
 
@@ -102,21 +104,12 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
         $this->authorize('update', Product::class);
 
-        $this->validate($request, [
-            'cate_id' => 'nullable|exists:cates,id',
-            'name' => 'nullable|string|max:255',
-            'description' => 'nullable'
-        ]);
+        $this->productService->update($request->validated(), $product);
 
-        $input = $request->all();
-
-        $input['operator_id'] = auth()->user()->id;
-
-        $product->update($input);
         return response($product, Response::HTTP_OK);
     }
 
