@@ -14,10 +14,10 @@ class CateService
         $this->cateRepository = $cateRepository;
     }
 
-    // public function findAll($request)
-    // {
-    //     return $this->productRepository->findAll($request);
-    // }
+    public function findAll()
+    {
+        return $this->cateRepository->findAll();
+    }
 
     public function create($request)
     {
