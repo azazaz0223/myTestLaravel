@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Product\IndexProductRequest;
 use App\Http\Requests\Product\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
@@ -24,39 +25,17 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(IndexProductRequest $request)
     {
         $this->authorize('viewAny', Product::class);
 
-        // 取得網址
-        $url = $request->url;
-
-        // 取得get params
-        $queryParams = $request->query();
-        // 重新排列，大家一致
-        ksort($queryParams);
-
-        // 將此轉為string
-        $queryString = http_build_query($queryParams);
-
-        // 重新組合
-        $fullUrl = "{$url}?{$queryString}";
+        $fullUrl = $this->productService->cacheUrl($request->url, $request->query());
 
         if (Cache::has($fullUrl)) {
             return Cache::get($fullUrl);
         }
 
-        $limit = $request->limit ?? 10;
-
-        $query = Product::query()->with('cate')->with('operator');
-
-        if (isset($request->name)) {
-            $query->where('name', 'like', $request->name . "%");
-        }
-
-        $products = $query->orderBy('id', 'desc')
-            ->paginate($limit)
-            ->appends($request->query());
+        $products = $this->productService->findAll($request);
 
         return Cache::remember($fullUrl, 60, function () use ($products) {
             return new ProductCollection($products);

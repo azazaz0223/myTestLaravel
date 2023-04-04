@@ -16,4 +16,19 @@ class ProductRepository
 
         return $product->update($request);
     }
+
+    public function findAll($request)
+    {
+        $limit = $request->limit;
+
+        $query = Product::query();
+
+        if (isset($request->name)) {
+            $query->where('name', 'like', $request->name . "%");
+        }
+
+        return $query->orderBy('id', 'desc')
+            ->paginate($limit)
+            ->appends($request->query());
+    }
 }
