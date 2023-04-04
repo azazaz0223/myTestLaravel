@@ -99,7 +99,8 @@ class ProductController extends Controller
     {
         $this->authorize('delete', Product::class);
 
-        $product->delete();
+        $this->productService->delete($product);
+
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

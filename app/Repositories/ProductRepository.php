@@ -31,4 +31,9 @@ class ProductRepository
             ->paginate($limit)
             ->appends($request->query());
     }
+
+    public function delete(Product $product)
+    {
+        return $product->delete();
+    }
 }
