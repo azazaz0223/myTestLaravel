@@ -26,8 +26,8 @@ class CateRepository
             ->get();
     }
 
-// public function delete(Product $product)
-// {
-//     return $product->delete();
-// }
+    public function delete(Cate $cate)
+    {
+        return $cate->delete();
+    }
 }

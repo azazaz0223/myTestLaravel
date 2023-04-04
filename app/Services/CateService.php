@@ -30,8 +30,8 @@ class CateService
         return $this->cateRepository->update($request, $cate);
     }
 
-// public function delete(Product $product)
-// {
-//     return $this->productRepository->delete($product);
-// }
+    public function delete(Cate $cate)
+    {
+        return $this->cateRepository->delete($cate);
+    }
 }

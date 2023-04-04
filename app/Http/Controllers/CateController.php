@@ -90,7 +90,8 @@ class CateController extends Controller
     {
         $this->authorize('delete', Cate::class);
 
-        $cate->delete();
+        $this->cateService->delete($cate);
+
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }
