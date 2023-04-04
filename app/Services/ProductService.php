@@ -41,4 +41,9 @@ class ProductService
         $request['operator_id'] = auth()->user()->id;
         return $this->productRepository->update($request, $product);
     }
+
+    public function delete(Product $product)
+    {
+        return $this->productRepository->delete($product);
+    }
 }
