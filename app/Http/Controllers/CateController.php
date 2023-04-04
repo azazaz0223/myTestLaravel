@@ -28,7 +28,7 @@ class CateController extends Controller
     {
         $this->authorize('viewAny', Cate::class);
 
-        $cates = Cate::select('id', 'name', 'sort', 'created_at', 'updated_at')->get();
+        $cates = $this->cateService->findAll();
 
         return new CateCollection($cates);
     }

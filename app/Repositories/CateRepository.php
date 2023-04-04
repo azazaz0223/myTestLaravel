@@ -18,20 +18,13 @@ class CateRepository
         return $cate->update($request);
     }
 
-// public function findAll($request)
-// {
-//     $limit = $request->limit;
-
-//     $query = Product::query();
-
-//     if (isset($request->name)) {
-//         $query->where('name', 'like', $request->name . "%");
-//     }
-
-//     return $query->orderBy('id', 'desc')
-//         ->paginate($limit)
-//         ->appends($request->query());
-// }
+    public function findAll()
+    {
+        return Cate::query()->
+            select('id', 'name', 'sort', 'created_at', 'updated_at')
+            ->orderBy('sort', 'desc')
+            ->get();
+    }
 
 // public function delete(Product $product)
 // {
