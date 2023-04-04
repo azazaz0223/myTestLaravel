@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Cate\StoreCateRequest;
 use App\Http\Resources\CateCollection;
 use App\Http\Resources\CateResource;
 use App\Models\Cate;
+use App\Services\CateService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class CateController extends Controller
 {
+    private $cateService;
+
+    public function __construct(CateService $cateService)
+    {
+        $this->cateService = $cateService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -34,21 +43,11 @@ class CateController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCateRequest $request)
     {
         $this->authorize('create', Cate::class);
 
-        $this->validate($request, [
-            'name' => [
-                'required',
-                'max:50',
-                Rule::unique('cates', 'name')
-            ],
-            'sort' => 'nullable|integer'
-        ]);
-
-        $cate = auth()->user()->cates()->create($request->all())->refresh();
-        $cate = Cate::create($request->all())->refresh();
+        $cate = $this->cateService->create($request);
 
         return response([ 'data' => $cate ], Response::HTTP_CREATED);
     }
