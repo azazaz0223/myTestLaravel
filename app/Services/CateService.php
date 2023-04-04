@@ -24,11 +24,11 @@ class CateService
         return $this->cateRepository->create($request);
     }
 
-// public function update($request, $product)
-// {
-//     $request['operator_id'] = auth()->user()->id;
-//     return $this->productRepository->update($request, $product);
-// }
+    public function update($request, $cate)
+    {
+        $request['operator_id'] = auth()->user()->id;
+        return $this->cateRepository->update($request, $cate);
+    }
 
 // public function delete(Product $product)
 // {

@@ -11,12 +11,12 @@ class CateRepository
         return auth()->user()->cates()->create($request)->refresh();
     }
 
-// public function update(array $request, Product $product)
-// {
-//     $request['operator_id'] = auth()->user()->id;
+    public function update(array $request, Cate $cate)
+    {
+        $request['operator_id'] = auth()->user()->id;
 
-//     return $product->update($request);
-// }
+        return $cate->update($request);
+    }
 
 // public function findAll($request)
 // {

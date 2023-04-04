@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Cate\StoreCateRequest;
+use App\Http\Requests\Cate\UpdateCateRequest;
 use App\Http\Resources\CateCollection;
 use App\Http\Resources\CateResource;
 use App\Models\Cate;
@@ -73,19 +74,11 @@ class CateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cate $cate)
+    public function update(UpdateCateRequest $request, Cate $cate)
     {
         $this->authorize('update', Cate::class);
 
-        $this->validate($request, [
-            'name' => [
-                'max:50',
-                Rule::unique('cates', 'name')->ignore($cate->name, 'name')
-            ],
-            'sort' => 'nullable|integer'
-        ]);
-
-        $cate->update($request->all());
+        $this->cateService->update($request->validated(), $cate);
 
         return response([ 'data' => $cate ], Response::HTTP_OK);
     }
