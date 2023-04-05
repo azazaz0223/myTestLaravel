@@ -63,7 +63,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        $this->authService->logout();
         return response([ 'data' => null ], Response::HTTP_NO_CONTENT);
     }
 
