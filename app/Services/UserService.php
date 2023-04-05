@@ -29,11 +29,19 @@ class UserService
         return $this->userRepository->create($user, $roles);
     }
 
-    // public function update($request, $product)
-// {
-//     $request['operator_id'] = auth()->user()->id;
-//     return $this->userRepository->update($request, $product);
-// }
+    public function update($request, $user)
+    {
+        $user->name = $request['name'] ?? $user->name;
+        $user->email = $request['email'] ?? $user->email;
+
+        if (isset($request['password'])) {
+            $user->password = bcrypt($request['password']);
+        }
+
+        $roles = $request['roles'] ?? null;
+
+        return $this->userRepository->update($user, $roles);
+    }
 
     public function delete(User $user)
     {

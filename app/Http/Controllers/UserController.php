@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -85,37 +86,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         $this->authorize('update', User::class);
 
-        $this->validate($request, [
-            'name' => 'string',
-            'email' => [
-                'string',
-                // 'email',
-                Rule::unique('users', 'email')->ignore($user->email, 'email')
-            ],
-            'password' => 'string|min:6|confirmed',
-            'roles' => 'array',
-            'roles.*' => [
-                'required',
-                Rule::exists('roles', 'id'),
-            ]
-        ]);
-
-        $user->name = $request->name ?? $user->name;
-        $user->email = $request->email ?? $user->email;
-        if (isset($request->password)) {
-            $user->password = bcrypt($request->password);
-        }
-        $user->save();
-
-        if (isset($request->roles)) {
-            $user->roles()->sync($request->roles);
-        } else {
-            $user->roles()->detach();
-        }
+        $user = $this->userService->update($request->validated(), $user);
 
         return response($user, Response::HTTP_OK);
     }
