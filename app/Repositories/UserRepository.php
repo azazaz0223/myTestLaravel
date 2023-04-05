@@ -17,30 +17,30 @@ class UserRepository
         return $user;
     }
 
-// public function update(array $request, Product $product)
+    // public function update(array $request, Product $product)
 // {
 //     $request['operator_id'] = auth()->user()->id;
 
-//     return $product->update($request);
+    //     return $product->update($request);
 // }
 
-// public function findAll($request)
+    // public function findAll($request)
 // {
 //     $limit = $request->limit;
 
-//     $query = Product::query();
+    //     $query = Product::query();
 
-//     if (isset($request->name)) {
+    //     if (isset($request->name)) {
 //         $query->where('name', 'like', $request->name . "%");
 //     }
 
-//     return $query->orderBy('id', 'desc')
+    //     return $query->orderBy('id', 'desc')
 //         ->paginate($limit)
 //         ->appends($request->query());
 // }
 
-// public function delete(Product $product)
-// {
-//     return $product->delete();
-// }
+    public function delete(User $user)
+    {
+        return $user->delete();
+    }
 }
