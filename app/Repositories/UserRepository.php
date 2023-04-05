@@ -31,20 +31,20 @@ class UserRepository
         return $user;
     }
 
-    // public function findAll($request)
-// {
-//     $limit = $request->limit;
+    public function findAll($request)
+    {
+        $limit = $request->limit;
 
-    //     $query = Product::query();
+        $query = User::query();
 
-    //     if (isset($request->name)) {
-//         $query->where('name', 'like', $request->name . "%");
-//     }
+        if (isset($request->name)) {
+            $query->where('name', 'like', $request->name . "%");
+        }
 
-    //     return $query->orderBy('id', 'desc')
-//         ->paginate($limit)
-//         ->appends($request->query());
-// }
+        return $query->orderBy('id', 'desc')
+            ->paginate($limit)
+            ->appends($request->query());
+    }
 
     public function delete(User $user)
     {
