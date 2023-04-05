@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+    private $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -46,33 +55,13 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
         $this->authorize('create', User::class);
 
-        $this->validate($request, [
-            'name' => 'required|string',
-            'email' => [
-                'required',
-                'string',
-                'email',
-                Rule::unique('users', 'email')
-            ],
-            'password' => 'required|string|min:6|confirmed',
-            'roles' => 'required|array',
-            'roles.*' => [
-                'required',
-                Rule::exists('roles', 'id'),
-            ]
-        ]);
+        $user = $this->userService->create($request);
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->save();
-
-        $user->assignRole($request->roles);
+        $user = $this->userService->assignRole($user, $request->roles);
 
         return response($user, Response::HTTP_OK);
     }
