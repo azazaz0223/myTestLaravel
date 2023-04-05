@@ -28,7 +28,8 @@ class RoleController extends Controller
     {
         $this->authorize('viewAny', Role::class);
 
-        $roles = Role::all();
+        $roles = $this->roleService->findAll();
+
         return new RoleCollection($roles);
     }
 

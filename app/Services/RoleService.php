@@ -14,10 +14,10 @@ class RoleService
         $this->roleRepository = $roleRepository;
     }
 
-    // public function findAll()
-    // {
-    //     return $this->roleRepository->findAll();
-    // }
+    public function findAll()
+    {
+        return $this->roleRepository->findAll();
+    }
 
     public function create($request)
     {
