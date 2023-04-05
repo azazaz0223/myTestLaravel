@@ -27,13 +27,10 @@ class RoleRepository
         return $role;
     }
 
-    // public function findAll()
-// {
-//     return Cate::query()->
-//         select('id', 'name', 'sort', 'created_at', 'updated_at')
-//         ->orderBy('sort', 'desc')
-//         ->get();
-// }
+    public function findAll()
+    {
+        return Role::all();
+    }
 
     public function delete(Role $role)
     {
