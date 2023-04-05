@@ -27,14 +27,14 @@ class RoleService
         return $this->roleRepository->create($role, $permissions);
     }
 
-// public function update($request, $role)
+    // public function update($request, $role)
 // {
 //     $request['operator_id'] = auth()->user()->id;
 //     return $this->roleRepository->update($request, $role);
 // }
 
-// public function delete(Role $role)
-// {
-//     return $this->roleRepository->delete($role);
-// }
+    public function delete(Role $role)
+    {
+        return $this->roleRepository->delete($role);
+    }
 }

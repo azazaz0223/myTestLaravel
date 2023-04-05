@@ -102,7 +102,8 @@ class RoleController extends Controller
     {
         $this->authorize('delete', Role::class);
 
-        $role->delete();
+        $this->roleService->delete($role);
+
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }
