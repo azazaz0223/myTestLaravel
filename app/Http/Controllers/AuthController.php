@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\LoginAuthRequest;
+use App\Services\AuthService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,14 +14,18 @@ class AuthController extends Controller
 {
     use ApiResponseTrait;
 
+    private $authService;
+
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(AuthService $authService)
     {
         $this->middleware('auth:api', [ 'except' => [ 'login', 'register' ] ]);
+
+        $this->authService = $authService;
     }
 
     /**
@@ -27,14 +33,11 @@ class AuthController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function login(Request $request)
+    public function login(LoginAuthRequest $request)
     {
-        $this->validate($request, [
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
+        $token = $this->authService->login($request->validated());
 
-        if (! $token = auth()->attempt($request->all())) {
+        if (! $token) {
             return $this->errorResponse('Unauthorized', Response::HTTP_UNAUTHORIZED);
         }
 
