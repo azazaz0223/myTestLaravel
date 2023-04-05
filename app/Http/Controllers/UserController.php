@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\IndexUserRequest;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserCollection;
@@ -24,23 +25,11 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(IndexUserRequest $request)
     {
         $this->authorize('viewAny', User::class);
 
-        $limit = $request->limit ?? 10;
-
-        $query = User::query();
-
-
-        if (isset($request->name)) {
-            $query->where('name', 'like', $request->name . "%");
-        }
-
-
-        $users = $query->orderBy('id', 'desc')
-            ->paginate($limit)
-            ->appends($request->query());
+        $users = $this->userService->findAll($request);
 
         return new UserCollection($users);
     }

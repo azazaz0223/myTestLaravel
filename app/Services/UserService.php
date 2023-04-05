@@ -14,10 +14,10 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    // public function findAll($request)
-    // {
-    //     return $this->userRepository->findAll($request);
-    // }
+    public function findAll($request)
+    {
+        return $this->userRepository->findAll($request);
+    }
 
     public function create($request)
     {
