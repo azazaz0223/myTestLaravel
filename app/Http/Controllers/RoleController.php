@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Role\StoreRoleRequest;
+use App\Http\Requests\Role\UpdateRoleRequest;
 use App\Http\Resources\RoleCollection;
 use App\Http\Resources\RoleResource;
 use App\Services\RoleService;
@@ -72,25 +73,11 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
         $this->authorize('update', Role::class);
 
-        $this->validate($request, [
-            'name' => [
-                'required',
-                Rule::unique('roles', 'name')->ignore($role->name, 'name')
-            ],
-            'permissions' => 'required|array',
-            'permissions.*' => [
-                'required',
-                Rule::exists('permissions', 'id')
-            ]
-        ]);
-
-        $role->save([ 'name' => $request->name ]);
-
-        $role->syncPermissions($request->permissions);
+        $role = $this->roleService->update($request->validated(), $role);
 
         return response($role, Response::HTTP_OK);
     }
