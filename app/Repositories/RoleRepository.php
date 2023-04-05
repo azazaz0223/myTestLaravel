@@ -17,12 +17,15 @@ class RoleRepository
         return $role;
     }
 
-    // public function update(array $request, Cate $cate)
-// {
-//     $request['operator_id'] = auth()->user()->id;
-
-    //     return $cate->update($request);
-// }
+    public function update(Role $role, $permissions)
+    {
+        $role = DB::transaction(function () use ($role, $permissions) {
+            $role->save();
+            $role->syncPermissions($permissions);
+            return $role;
+        });
+        return $role;
+    }
 
     // public function findAll()
 // {
