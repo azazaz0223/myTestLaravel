@@ -17,12 +17,19 @@ class UserRepository
         return $user;
     }
 
-    // public function update(array $request, Product $product)
-// {
-//     $request['operator_id'] = auth()->user()->id;
-
-    //     return $product->update($request);
-// }
+    public function update(User $user, $roles)
+    {
+        $user = DB::transaction(function () use ($user, $roles) {
+            $user->save();
+            if (isset($roles)) {
+                $user->roles()->sync($roles);
+            } else {
+                $user->roles()->detach();
+            }
+            return $user;
+        });
+        return $user;
+    }
 
     // public function findAll($request)
 // {
