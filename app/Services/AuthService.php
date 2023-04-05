@@ -19,10 +19,10 @@ class AuthService
         return auth()->attempt($request);
     }
 
-// public function findAll()
-// {
-//     return $this->authRepository->findAll();
-// }
+    public function register($request)
+    {
+        return $this->authRepository->register($request);
+    }
 
 // public function create($request)
 // {

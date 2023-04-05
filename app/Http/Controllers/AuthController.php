@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginAuthRequest;
+use App\Http\Requests\Auth\RegisterAuthRequest;
 use App\Services\AuthService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
@@ -49,20 +50,9 @@ class AuthController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function register(Request $request)
+    public function register(RegisterAuthRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|string|between:2,100',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|confirmed|min:6',
-        ]);
-
-        $user = User::create(
-            array_merge(
-                $request->all(),
-                [ 'password' => bcrypt($request->password) ]
-            )
-        );
+        $user = $this->authService->register($request);
         return response([ 'data' => $user ], Response::HTTP_CREATED);
     }
 
