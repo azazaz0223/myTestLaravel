@@ -127,7 +127,8 @@ class UserController extends Controller
     {
         $this->authorize('delete', User::class);
 
-        $user->delete();
+        $this->userService->delete($user);
+
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

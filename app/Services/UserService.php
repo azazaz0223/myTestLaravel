@@ -29,14 +29,14 @@ class UserService
         return $this->userRepository->create($user, $roles);
     }
 
-// public function update($request, $product)
+    // public function update($request, $product)
 // {
 //     $request['operator_id'] = auth()->user()->id;
 //     return $this->userRepository->update($request, $product);
 // }
 
-// public function delete(Product $product)
-// {
-//     return $this->userRepository->delete($product);
-// }
+    public function delete(User $user)
+    {
+        return $this->userRepository->delete($user);
+    }
 }
