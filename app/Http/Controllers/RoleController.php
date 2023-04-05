@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Resources\RoleCollection;
 use App\Http\Resources\RoleResource;
+use App\Services\RoleService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
@@ -11,6 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleController extends Controller
 {
+    private $roleService;
+
+    public function __construct(RoleService $roleService)
+    {
+        $this->roleService = $roleService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -33,25 +42,11 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
         $this->authorize('create', Role::class);
 
-        $this->validate($request, [
-            'name' => [
-                'required',
-                Rule::unique('roles', 'name')
-            ],
-            'permissions' => 'required|array',
-            'permissions.*' => [
-                'required',
-                Rule::exists('permissions', 'id')
-            ]
-        ]);
-
-        $role = Role::create([ 'name' => $request->name ])->refresh();
-
-        $role->syncPermissions($request->permissions);
+        $role = $this->roleService->create($request->validated());
 
         return response($role, Response::HTTP_CREATED);
     }
