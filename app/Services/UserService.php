@@ -22,15 +22,11 @@ class UserService
     public function create($request)
     {
         $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        return $this->userRepository->create($request);
-    }
-
-    public function assignRole($user, $roles)
-    {
-        return $this->userRepository->assignRole($user, $roles);
+        $user->name = $request['name'];
+        $user->email = $request['email'];
+        $user->password = bcrypt($request['password']);
+        $roles = $request['roles'];
+        return $this->userRepository->create($request, $roles);
     }
 
 // public function update($request, $product)

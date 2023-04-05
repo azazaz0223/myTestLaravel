@@ -48,7 +48,7 @@ class CateController extends Controller
     {
         $this->authorize('create', Cate::class);
 
-        $cate = $this->cateService->create($request);
+        $cate = $this->cateService->create($request->validated());
 
         return response([ 'data' => $cate ], Response::HTTP_CREATED);
     }

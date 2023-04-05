@@ -59,9 +59,7 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-        $user = $this->userService->create($request);
-
-        $user = $this->userService->assignRole($user, $request->roles);
+        $user = $this->userService->create($request->validated());
 
         return response($user, Response::HTTP_OK);
     }

@@ -3,17 +3,18 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use DB;
 
 class UserRepository
 {
-    public function create(User $user)
+    public function create($user, $roles)
     {
-        return $user->create();
-    }
-
-    public function assignRole(User $user, $roles)
-    {
-        return $user->assignRole($roles);
+        $user = DB::transaction(function () use ($user, $roles) {
+            $user = User::create($user)->refresh();
+            $user->assignRole($roles);
+            return $user;
+        });
+        return $user;
     }
 
 // public function update(array $request, Product $product)
