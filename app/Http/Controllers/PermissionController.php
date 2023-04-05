@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PermissionCollection;
 use App\Http\Resources\PermissionResource;
+use App\Services\PermissionService;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Symfony\Component\HttpFoundation\Response;
 
 class PermissionController extends Controller
 {
+    private $permissionService;
+
+    public function __construct(PermissionService $permissionService)
+    {
+        $this->permissionService = $permissionService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -17,7 +25,7 @@ class PermissionController extends Controller
     {
         $this->authorize('viewAny', Permission::class);
 
-        $permissions = Permission::all();
+        $permissions = $this->permissionService->findAll();
         return new PermissionCollection($permissions);
     }
 
