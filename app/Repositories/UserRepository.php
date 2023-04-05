@@ -10,7 +10,7 @@ class UserRepository
     public function create($user, $roles)
     {
         $user = DB::transaction(function () use ($user, $roles) {
-            $user = User::create($user)->refresh();
+            $user->save();
             $user->assignRole($roles);
             return $user;
         });

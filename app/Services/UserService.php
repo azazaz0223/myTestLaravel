@@ -26,7 +26,7 @@ class UserService
         $user->email = $request['email'];
         $user->password = bcrypt($request['password']);
         $roles = $request['roles'];
-        return $this->userRepository->create($request, $roles);
+        return $this->userRepository->create($user, $roles);
     }
 
 // public function update($request, $product)
