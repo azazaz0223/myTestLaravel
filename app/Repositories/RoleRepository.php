@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use DB;
+use Spatie\Permission\Models\Role;
 
 class RoleRepository
 {
@@ -16,14 +17,14 @@ class RoleRepository
         return $role;
     }
 
-// public function update(array $request, Cate $cate)
+    // public function update(array $request, Cate $cate)
 // {
 //     $request['operator_id'] = auth()->user()->id;
 
-//     return $cate->update($request);
+    //     return $cate->update($request);
 // }
 
-// public function findAll()
+    // public function findAll()
 // {
 //     return Cate::query()->
 //         select('id', 'name', 'sort', 'created_at', 'updated_at')
@@ -31,8 +32,8 @@ class RoleRepository
 //         ->get();
 // }
 
-// public function delete(Cate $cate)
-// {
-//     return $cate->delete();
-// }
+    public function delete(Role $role)
+    {
+        return $role->delete();
+    }
 }
