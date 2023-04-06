@@ -24,19 +24,8 @@ class AuthService
         return $this->authRepository->register($request);
     }
 
-// public function create($request)
-// {
-//     return $this->authRepository->create($request);
-// }
-
-// public function update($request, $cate)
-// {
-//     $request['operator_id'] = auth()->user()->id;
-//     return $this->authRepository->update($request, $cate);
-// }
-
-// public function delete(Cate $cate)
-// {
-//     return $this->authRepository->delete($cate);
-// }
+    public function logout()
+    {
+        return auth()->logout();
+    }
 }
