@@ -5,11 +5,7 @@ use App\Http\Requests\Auth\LoginAuthRequest;
 use App\Http\Requests\Auth\RegisterAuthRequest;
 use App\Services\AuthService;
 use App\Traits\ApiResponseTrait;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
-use Validator;
 
 class AuthController extends Controller
 {

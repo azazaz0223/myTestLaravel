@@ -7,8 +7,6 @@ use App\Http\Requests\Role\UpdateRoleRequest;
 use App\Http\Resources\RoleCollection;
 use App\Http\Resources\RoleResource;
 use App\Services\RoleService;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 

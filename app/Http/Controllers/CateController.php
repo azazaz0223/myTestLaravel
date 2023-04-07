@@ -8,8 +8,6 @@ use App\Http\Resources\CateCollection;
 use App\Http\Resources\CateResource;
 use App\Models\Cate;
 use App\Services\CateService;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 class CateController extends Controller
