@@ -71,7 +71,9 @@ class ProductController extends Controller
     {
         $this->authorize('view', Product::class);
 
-        return new ProductResource($product);
+        $product = new ProductResource($product);
+
+        return $this->successResponse($product, Response::HTTP_OK);
     }
 
     /**
