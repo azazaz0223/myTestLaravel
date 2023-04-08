@@ -103,6 +103,6 @@ class ProductController extends Controller
 
         $this->productService->delete($product);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return $this->successResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
