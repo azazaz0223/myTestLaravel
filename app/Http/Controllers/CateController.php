@@ -81,7 +81,7 @@ class CateController extends Controller
 
         $this->cateService->update($request->validated(), $cate);
 
-        return response([ 'data' => $cate ], Response::HTTP_OK);
+        return $this->successResponse($cate, Response::HTTP_OK);
     }
 
     /**
