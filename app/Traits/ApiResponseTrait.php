@@ -16,10 +16,28 @@ trait ApiResponseTrait
   {
     $code = $code ?? $status;
 
-    return response()->json(
+    return response(
       [
         'code' => $code,
         'message' => $message
+      ],
+      $status
+    );
+  }
+
+  /**
+   * 定義統一成功回應方法
+   *
+   * @param mixed $data 資料
+   * @param mixed $status HTTP狀態碼
+   * @return \Illuminate\Http\Response
+   */
+  public function successResponse($data, $status)
+  {
+    return response(
+      [
+        'code' => 00,
+        'data' => $data,
       ],
       $status
     );
