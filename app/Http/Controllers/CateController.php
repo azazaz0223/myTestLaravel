@@ -8,10 +8,13 @@ use App\Http\Resources\CateCollection;
 use App\Http\Resources\CateResource;
 use App\Models\Cate;
 use App\Services\CateService;
+use App\Traits\ApiResponseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class CateController extends Controller
 {
+    use ApiResponseTrait;
+
     private $cateService;
 
     public function __construct(CateService $cateService)
@@ -48,7 +51,7 @@ class CateController extends Controller
 
         $cate = $this->cateService->create($request->validated());
 
-        return response([ 'data' => $cate ], Response::HTTP_CREATED);
+        return $this->successResponse($cate, Response::HTTP_CREATED);
     }
 
     /**
