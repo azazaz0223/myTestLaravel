@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Product\IndexProductRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
-use App\Http\Resources\ProductCollection;
-use App\Http\Resources\ProductResource;
+use App\Http\Resources\Product\ProductCollection;
+use App\Http\Resources\Product\ProductResource;
 use App\Models\Product;
 use App\Services\ProductService;
 use App\Traits\ApiResponseTrait;
@@ -40,7 +40,7 @@ class ProductController extends Controller
         $products = $this->productService->findAll($request);
 
         return Cache::remember($fullUrl, 60, function () use ($products) {
-            return new ProductCollection($products);
+            return $this->successResponse(new ProductCollection($products), Response::HTTP_OK);
         });
     }
 
@@ -71,9 +71,7 @@ class ProductController extends Controller
     {
         $this->authorize('view', Product::class);
 
-        $product = new ProductResource($product);
-
-        return $this->successResponse($product, Response::HTTP_OK);
+        return new ProductResource($product);
     }
 
     /**
