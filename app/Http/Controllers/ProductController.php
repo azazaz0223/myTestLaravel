@@ -91,7 +91,7 @@ class ProductController extends Controller
 
         $this->productService->update($request->validated(), $product);
 
-        return response($product, Response::HTTP_OK);
+        return $this->successResponse($product, Response::HTTP_OK);
     }
 
     /**
