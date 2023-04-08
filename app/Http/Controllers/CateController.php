@@ -61,7 +61,9 @@ class CateController extends Controller
     {
         $this->authorize('view', Cate::class);
 
-        return new CateResource($cate);
+        $cate = new CateResource($cate);
+
+        return $this->successResponse($cate, Response::HTTP_OK);
     }
 
     /**
