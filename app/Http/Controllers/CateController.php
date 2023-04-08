@@ -95,6 +95,6 @@ class CateController extends Controller
 
         $this->cateService->delete($cate);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return $this->successResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
