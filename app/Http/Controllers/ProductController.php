@@ -9,11 +9,14 @@ use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\ProductService;
+use App\Traits\ApiResponseTrait;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
+    use ApiResponseTrait;
+
     private $productService;
 
     public function __construct(ProductService $productService)
@@ -58,7 +61,7 @@ class ProductController extends Controller
 
         $product = $this->productService->create($request->validated());
 
-        return response($product, Response::HTTP_CREATED);
+        return $this->successResponse($product, Response::HTTP_CREATED);
     }
 
     /**

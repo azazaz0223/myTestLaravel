@@ -36,7 +36,7 @@ trait ApiResponseTrait
   {
     return response(
       [
-        'code' => 00,
+        'code' => "00",
         'data' => $data,
       ],
       $status
