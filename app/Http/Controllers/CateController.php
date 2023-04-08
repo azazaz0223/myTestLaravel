@@ -29,9 +29,9 @@ class CateController extends Controller
     {
         $this->authorize('viewAny', Cate::class);
 
-        $cates = $this->cateService->findAll();
+        $cates = new CateCollection($this->cateService->findAll());
 
-        return new CateCollection($cates);
+        return $this->successResponse($cates, Response::HTTP_OK);
     }
 
     /**
