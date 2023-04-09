@@ -3,14 +3,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginAuthRequest;
 use App\Http\Requests\Auth\RegisterAuthRequest;
+use App\Http\Resources\Auth\TokenResource;
 use App\Services\AuthService;
-use App\Traits\ApiResponseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    use ApiResponseTrait;
-
     private $authService;
 
     /**
@@ -92,15 +90,6 @@ class AuthController extends Controller
      */
     protected function createNewToken($token)
     {
-        return response(
-            [
-                'data' => [
-                    'access_token' => $token,
-                    'token_type' => 'bearer',
-                    'expires_in' => auth()->factory()->getTTL() * 3600,
-                    'user' => auth()->user()
-                ]
-            ], Response::HTTP_OK
-        );
+        return $this->successResponse(new TokenResource($token), Response::HTTP_OK);
     }
 }
