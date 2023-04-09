@@ -6,6 +6,7 @@ use App\Http\Resources\Permission\PermissionCollection;
 use App\Http\Resources\Permission\PermissionResource;
 use App\Services\PermissionService;
 use Spatie\Permission\Models\Permission;
+use Symfony\Component\HttpFoundation\Response;
 
 class PermissionController extends Controller
 {
@@ -23,8 +24,9 @@ class PermissionController extends Controller
     {
         $this->authorize('viewAny', Permission::class);
 
-        $permissions = $this->permissionService->findAll();
-        return new PermissionCollection($permissions);
+        $permissions = new PermissionCollection($this->permissionService->findAll());
+
+        return $this->successResponse($permissions, Response::HTTP_OK);
     }
 
     /**
@@ -34,6 +36,6 @@ class PermissionController extends Controller
     {
         $this->authorize('view', Permission::class);
 
-        return new PermissionResource($permission);
+        return $this->successResponse(new PermissionResource($permission), Response::HTTP_OK);
     }
 }
