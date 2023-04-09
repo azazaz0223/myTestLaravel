@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\IndexUserRequest;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Http\Resources\UserCollection;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\User\UserCollection;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use App\Services\UserService;
 use App\Traits\ApiResponseTrait;
@@ -30,9 +30,9 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $users = $this->userService->findAll($request);
+        $users = new UserCollection($this->userService->findAll($request));
 
-        return new UserCollection($users);
+        return $this->successResponse($users, Response::HTTP_OK);
     }
 
     /**
