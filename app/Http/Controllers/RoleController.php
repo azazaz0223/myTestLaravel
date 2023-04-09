@@ -29,9 +29,7 @@ class RoleController extends Controller
 
         $roles = new RoleCollection($this->roleService->findAll());
 
-
-
-        return new RoleCollection($roles);
+        return $this->successResponse($roles, Response::HTTP_OK);
     }
 
     /**
