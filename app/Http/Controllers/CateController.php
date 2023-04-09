@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Cate\StoreCateRequest;
 use App\Http\Requests\Cate\UpdateCateRequest;
-use App\Http\Resources\CateCollection;
-use App\Http\Resources\CateResource;
+use App\Http\Resources\Cate\CateCollection;
+use App\Http\Resources\Cate\CateResource;
 use App\Models\Cate;
 use App\Services\CateService;
 use App\Traits\ApiResponseTrait;
