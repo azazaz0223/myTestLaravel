@@ -62,7 +62,7 @@ class UserController extends Controller
     {
         $this->authorize('view', User::class);
 
-        return new UserResource($user);
+        return $this->successResponse(new UserResource($user), Response::HTTP_OK);
     }
 
     /**
