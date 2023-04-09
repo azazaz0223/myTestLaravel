@@ -91,6 +91,6 @@ class RoleController extends Controller
 
         $this->roleService->delete($role);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return $this->successResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
