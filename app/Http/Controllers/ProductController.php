@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
-    use ApiResponseTrait;
-
     private $productService;
 
     public function __construct(ProductService $productService)

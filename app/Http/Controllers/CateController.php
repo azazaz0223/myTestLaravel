@@ -13,8 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CateController extends Controller
 {
-    use ApiResponseTrait;
-
     private $cateService;
 
     public function __construct(CateService $cateService)

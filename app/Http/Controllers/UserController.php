@@ -14,8 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-    use ApiResponseTrait;
-
     private $userService;
 
     public function __construct(UserService $userService)
