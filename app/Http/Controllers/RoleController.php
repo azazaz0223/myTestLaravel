@@ -49,7 +49,7 @@ class RoleController extends Controller
 
         $role = $this->roleService->create($request->validated());
 
-        return response($role, Response::HTTP_CREATED);
+        return $this->successResponse($role, Response::HTTP_CREATED);
     }
 
     /**
@@ -79,7 +79,7 @@ class RoleController extends Controller
 
         $role = $this->roleService->update($request->validated(), $role);
 
-        return response($role, Response::HTTP_OK);
+        return $this->successResponse($role, Response::HTTP_OK);
     }
 
     /**
