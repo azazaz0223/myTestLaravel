@@ -59,7 +59,7 @@ class RoleController extends Controller
     {
         $this->authorize('view', Role::class);
 
-        return new RoleResource($role);
+        return $this->successResponse(new RoleResource($role), Response::HTTP_OK);
     }
 
     /**
