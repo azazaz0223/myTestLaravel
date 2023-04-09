@@ -7,6 +7,7 @@ use App\Http\Requests\Role\UpdateRoleRequest;
 use App\Http\Resources\Role\RoleCollection;
 use App\Http\Resources\Role\RoleResource;
 use App\Services\RoleService;
+use App\Traits\ApiResponseTrait;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,9 +27,9 @@ class RoleController extends Controller
     {
         $this->authorize('viewAny', Role::class);
 
-        $roles = $this->roleService->findAll();
+        $roles = new RoleCollection($this->roleService->findAll());
 
-        return new RoleCollection($roles);
+        return $this->successResponse($roles, Response::HTTP_OK);
     }
 
     /**
