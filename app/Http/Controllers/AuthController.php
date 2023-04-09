@@ -79,7 +79,7 @@ class AuthController extends Controller
      */
     public function userProfile()
     {
-        return response([ 'data' => auth()->user() ], Response::HTTP_OK);
+        return $this->successResponse(auth()->user(), Response::HTTP_OK);
     }
 
     /**
