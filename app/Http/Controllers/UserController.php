@@ -82,7 +82,7 @@ class UserController extends Controller
 
         $user = $this->userService->update($request->validated(), $user);
 
-        return response($user, Response::HTTP_OK);
+        return $this->successResponse($user, Response::HTTP_OK);
     }
 
     /**
