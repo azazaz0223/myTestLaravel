@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
-use App\Http\Resources\RoleCollection;
-use App\Http\Resources\RoleResource;
+use App\Http\Resources\Role\RoleCollection;
+use App\Http\Resources\Role\RoleResource;
 use App\Services\RoleService;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;

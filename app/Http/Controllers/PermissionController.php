@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PermissionCollection;
-use App\Http\Resources\PermissionResource;
+use App\Http\Resources\Permission\PermissionCollection;
+use App\Http\Resources\Permission\PermissionResource;
 use App\Services\PermissionService;
 use Spatie\Permission\Models\Permission;
 
