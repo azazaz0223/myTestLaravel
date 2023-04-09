@@ -3,14 +3,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginAuthRequest;
 use App\Http\Requests\Auth\RegisterAuthRequest;
+use App\Http\Resources\Auth\TokenResource;
 use App\Services\AuthService;
-use App\Traits\ApiResponseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    use ApiResponseTrait;
-
     private $authService;
 
     /**
@@ -49,7 +47,8 @@ class AuthController extends Controller
     public function register(RegisterAuthRequest $request)
     {
         $user = $this->authService->register($request);
-        return response([ 'data' => $user ], Response::HTTP_CREATED);
+
+        return $this->successResponse($user, Response::HTTP_CREATED);
     }
 
     /**
@@ -60,7 +59,8 @@ class AuthController extends Controller
     public function logout()
     {
         $this->authService->logout();
-        return response([ 'data' => null ], Response::HTTP_NO_CONTENT);
+
+        return $this->successResponse(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -80,7 +80,7 @@ class AuthController extends Controller
      */
     public function userProfile()
     {
-        return response([ 'data' => auth()->user() ], Response::HTTP_OK);
+        return $this->successResponse(auth()->user(), Response::HTTP_OK);
     }
 
     /**
@@ -92,15 +92,6 @@ class AuthController extends Controller
      */
     protected function createNewToken($token)
     {
-        return response(
-            [
-                'data' => [
-                    'access_token' => $token,
-                    'token_type' => 'bearer',
-                    'expires_in' => auth()->factory()->getTTL() * 3600,
-                    'user' => auth()->user()
-                ]
-            ], Response::HTTP_OK
-        );
+        return $this->successResponse(new TokenResource($token), Response::HTTP_OK);
     }
 }

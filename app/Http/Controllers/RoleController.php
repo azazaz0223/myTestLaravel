@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
-use App\Http\Resources\RoleCollection;
-use App\Http\Resources\RoleResource;
+use App\Http\Resources\Role\RoleCollection;
+use App\Http\Resources\Role\RoleResource;
 use App\Services\RoleService;
+use App\Traits\ApiResponseTrait;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,9 +27,9 @@ class RoleController extends Controller
     {
         $this->authorize('viewAny', Role::class);
 
-        $roles = $this->roleService->findAll();
+        $roles = new RoleCollection($this->roleService->findAll());
 
-        return new RoleCollection($roles);
+        return $this->successResponse($roles, Response::HTTP_OK);
     }
 
     /**
@@ -48,7 +49,7 @@ class RoleController extends Controller
 
         $role = $this->roleService->create($request->validated());
 
-        return response($role, Response::HTTP_CREATED);
+        return $this->successResponse($role, Response::HTTP_CREATED);
     }
 
     /**
@@ -58,7 +59,7 @@ class RoleController extends Controller
     {
         $this->authorize('view', Role::class);
 
-        return new RoleResource($role);
+        return $this->successResponse(new RoleResource($role), Response::HTTP_OK);
     }
 
     /**
@@ -78,7 +79,7 @@ class RoleController extends Controller
 
         $role = $this->roleService->update($request->validated(), $role);
 
-        return response($role, Response::HTTP_OK);
+        return $this->successResponse($role, Response::HTTP_OK);
     }
 
     /**
@@ -90,6 +91,6 @@ class RoleController extends Controller
 
         $this->roleService->delete($role);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return $this->successResponse(null, Response::HTTP_NO_CONTENT);
     }
 }

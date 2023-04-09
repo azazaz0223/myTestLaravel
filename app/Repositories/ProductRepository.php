@@ -21,7 +21,7 @@ class ProductRepository
     {
         $limit = $request->limit;
 
-        $query = Product::query();
+        $query = Product::query()->with([ 'cate', 'operator' ]);
 
         if (isset($request->name)) {
             $query->where('name', 'like', $request->name . "%");

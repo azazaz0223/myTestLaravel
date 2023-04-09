@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\IndexUserRequest;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Http\Resources\UserCollection;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\User\UserCollection;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use App\Services\UserService;
+use App\Traits\ApiResponseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -27,9 +28,9 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $users = $this->userService->findAll($request);
+        $users = new UserCollection($this->userService->findAll($request));
 
-        return new UserCollection($users);
+        return $this->successResponse($users, Response::HTTP_OK);
     }
 
     /**
@@ -49,7 +50,7 @@ class UserController extends Controller
 
         $user = $this->userService->create($request->validated());
 
-        return response($user, Response::HTTP_OK);
+        return $this->successResponse($user, Response::HTTP_OK);
     }
 
     /**
@@ -59,7 +60,7 @@ class UserController extends Controller
     {
         $this->authorize('view', User::class);
 
-        return new UserResource($user);
+        return $this->successResponse(new UserResource($user), Response::HTTP_OK);
     }
 
     /**
@@ -79,7 +80,7 @@ class UserController extends Controller
 
         $user = $this->userService->update($request->validated(), $user);
 
-        return response($user, Response::HTTP_OK);
+        return $this->successResponse($user, Response::HTTP_OK);
     }
 
     /**
@@ -91,6 +92,6 @@ class UserController extends Controller
 
         $this->userService->delete($user);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return $this->successResponse(null, Response::HTTP_NO_CONTENT);
     }
 }

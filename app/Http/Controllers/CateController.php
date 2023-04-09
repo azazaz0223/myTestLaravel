@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Cate\StoreCateRequest;
 use App\Http\Requests\Cate\UpdateCateRequest;
-use App\Http\Resources\CateCollection;
-use App\Http\Resources\CateResource;
+use App\Http\Resources\Cate\CateCollection;
+use App\Http\Resources\Cate\CateResource;
 use App\Models\Cate;
 use App\Services\CateService;
+use App\Traits\ApiResponseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class CateController extends Controller
@@ -26,9 +27,9 @@ class CateController extends Controller
     {
         $this->authorize('viewAny', Cate::class);
 
-        $cates = $this->cateService->findAll();
+        $cates = new CateCollection($this->cateService->findAll());
 
-        return new CateCollection($cates);
+        return $this->successResponse($cates, Response::HTTP_OK);
     }
 
     /**
@@ -48,7 +49,7 @@ class CateController extends Controller
 
         $cate = $this->cateService->create($request->validated());
 
-        return response([ 'data' => $cate ], Response::HTTP_CREATED);
+        return $this->successResponse($cate, Response::HTTP_CREATED);
     }
 
     /**
@@ -58,7 +59,9 @@ class CateController extends Controller
     {
         $this->authorize('view', Cate::class);
 
-        return new CateResource($cate);
+        $cate = new CateResource($cate);
+
+        return $this->successResponse($cate, Response::HTTP_OK);
     }
 
     /**
@@ -78,7 +81,7 @@ class CateController extends Controller
 
         $this->cateService->update($request->validated(), $cate);
 
-        return response([ 'data' => $cate ], Response::HTTP_OK);
+        return $this->successResponse($cate, Response::HTTP_OK);
     }
 
     /**
@@ -90,6 +93,6 @@ class CateController extends Controller
 
         $this->cateService->delete($cate);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return $this->successResponse(null, Response::HTTP_NO_CONTENT);
     }
 }

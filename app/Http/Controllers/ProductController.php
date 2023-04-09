@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Product\IndexProductRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
-use App\Http\Resources\ProductCollection;
-use App\Http\Resources\ProductResource;
+use App\Http\Resources\Product\ProductCollection;
+use App\Http\Resources\Product\ProductResource;
 use App\Models\Product;
 use App\Services\ProductService;
+use App\Traits\ApiResponseTrait;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -37,7 +38,7 @@ class ProductController extends Controller
         $products = $this->productService->findAll($request);
 
         return Cache::remember($fullUrl, 60, function () use ($products) {
-            return new ProductCollection($products);
+            return $this->successResponse(new ProductCollection($products), Response::HTTP_OK);
         });
     }
 
@@ -58,7 +59,7 @@ class ProductController extends Controller
 
         $product = $this->productService->create($request->validated());
 
-        return response($product, Response::HTTP_CREATED);
+        return $this->successResponse($product, Response::HTTP_CREATED);
     }
 
     /**
@@ -68,7 +69,9 @@ class ProductController extends Controller
     {
         $this->authorize('view', Product::class);
 
-        return new ProductResource($product);
+        $product = new ProductResource($product);
+
+        return $this->successResponse($product, Response::HTTP_OK);
     }
 
     /**
@@ -88,7 +91,7 @@ class ProductController extends Controller
 
         $this->productService->update($request->validated(), $product);
 
-        return response($product, Response::HTTP_OK);
+        return $this->successResponse($product, Response::HTTP_OK);
     }
 
     /**
@@ -100,6 +103,6 @@ class ProductController extends Controller
 
         $this->productService->delete($product);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return $this->successResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
