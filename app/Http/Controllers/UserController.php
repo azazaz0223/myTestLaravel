@@ -9,10 +9,13 @@ use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
+use App\Traits\ApiResponseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+    use ApiResponseTrait;
+
     private $userService;
 
     public function __construct(UserService $userService)
@@ -49,7 +52,7 @@ class UserController extends Controller
 
         $user = $this->userService->create($request->validated());
 
-        return response($user, Response::HTTP_OK);
+        return $this->successResponse($user, Response::HTTP_OK);
     }
 
     /**
