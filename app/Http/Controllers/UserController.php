@@ -94,6 +94,6 @@ class UserController extends Controller
 
         $this->userService->delete($user);
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return $this->successResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
