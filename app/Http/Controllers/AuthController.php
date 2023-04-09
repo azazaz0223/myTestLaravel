@@ -47,7 +47,8 @@ class AuthController extends Controller
     public function register(RegisterAuthRequest $request)
     {
         $user = $this->authService->register($request);
-        return response([ 'data' => $user ], Response::HTTP_CREATED);
+
+        return $this->successResponse($user, Response::HTTP_CREATED);
     }
 
     /**
